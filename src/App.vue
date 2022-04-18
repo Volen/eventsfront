@@ -1,12 +1,46 @@
 <template>
   <div id="app">
-    <nav>
+    <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
-    </nav>
+      <span v-if="isLoggedIn">
+        | <a @click="logout">Выйти ({{ currentUser }})</a></span
+      >
+    </div>
     <router-view />
   </div>
 </template>
+
+<script>
+export default {
+  computed: {
+    isLoggedIn: function () {
+      return this.$store.getters.isLoggedIn;
+    },
+    currentUser: function () {
+      return this.$store.state.user;
+    },
+  },
+  methods: {
+    logout: function () {
+      this.$store.dispatch("logout").then(() => {
+        this.$router.push("/login");
+      });
+    },
+  },
+  created: function () {
+    this.$http.interceptors.response.use(undefined, function (err) {
+      // eslint-disable-next-line
+      return new Promise(function (resolve, reject) {
+        if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+          this.$store.dispatch("logout");
+        }
+        throw err;
+      });
+    });
+  },
+};
+</script>
 
 <style>
 #app {
