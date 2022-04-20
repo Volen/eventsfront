@@ -57,7 +57,7 @@ export default {
     },
     firstPhase() {
       axios({
-        url: "https://shielded-lake-24260.herokuapp.com/first_phase",
+        url: "http://localhost:8000/first_phase",
         data: {
           poll_key: this.activePoll.key,
           time: this.eventTime,
@@ -76,9 +76,7 @@ export default {
     },
   },
   beforeMount() {
-    const ws = new WebSocket(
-      "ws://shielded-lake-24260.herokuapp.com/first_phase"
-    );
+    const ws = new WebSocket("ws://localhost:8000/first_phase");
     ws.onmessage = this.onMessage;
     this.ws = ws;
   },
@@ -138,7 +136,7 @@ export default {
     }
 
     axios({
-      url: "https://shielded-lake-24260.herokuapp.com/poll/active",
+      url: "http://localhost:8000/poll/active",
       data: {},
       method: "GET",
     })

@@ -26,7 +26,7 @@ export default {
   methods: {
     createPoll() {
       axios({
-        url: "https://shielded-lake-24260.herokuapp.com/poll",
+        url: "http://localhost:8000/poll",
         data: {
           first_phase_minutes: this.firstPhaseMinutes,
           second_phase_minutes: this.secondPhaseMinutes,
@@ -54,7 +54,7 @@ export default {
   },
   mounted() {
     axios({
-      url: "https://shielded-lake-24260.herokuapp.com/poll/active",
+      url: "http://localhost:8000/poll/active",
       data: {},
       method: "GET",
     })
