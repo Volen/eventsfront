@@ -9,19 +9,33 @@
       <label>Выберите время проведения мероприятия.</label>
       <select id="time-select" v-model="eventTime"></select>
       <label>Мероприятие</label>
-      <input v-model="eventText" type="text" />
+      <vue-simple-suggest
+        v-model="eventText"
+        :list="eventSuggestionList"
+        :filter-by-query="true"
+      >
+      </vue-simple-suggest>
+      <!-- <input v-model="eventText" type="text" /> -->
       <button type="submit">Внести мероприятие</button>
     </form>
     <p v-else>Вы уже проголосовали!</p>
     <p>Active Poll: {{ this.activePoll }}</p>
     <p>Polling users: {{ this.items }}</p>
+    <p>Event Text: {{ this.eventText }}</p>
+    <p>
+      Число проголосовавших пользователей:
+      {{ this.items === null ? "loading..." : this.items.length }}
+    </p>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import VueSimpleSuggest from "vue-simple-suggest";
+import "vue-simple-suggest/dist/styles.css";
 
 export default {
+  components: { VueSimpleSuggest },
   data() {
     return {
       endtime: null,
@@ -31,9 +45,24 @@ export default {
       isVote: false,
       ws: null,
       items: null,
+      eventDict: [],
     };
   },
   methods: {
+    async eventSuggestionList() {
+      await axios({
+        url: "http://localhost:8000/event_dict",
+        data: {},
+        method: "GET",
+      })
+        .then((response) => {
+          this.eventDict = response.data.map((event) => event.event);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      return this.eventDict;
+    },
     onMessage(ev) {
       const recv = JSON.parse(ev.data);
       let endTime = recv.endtime;
@@ -72,6 +101,8 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+          this.isVote = true;
+          alert("Вы уже голосовали!");
         });
     },
   },
