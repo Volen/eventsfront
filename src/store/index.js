@@ -35,7 +35,7 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         commit("auth_request");
         axios({
-          url: "http://localhost:8000/token",
+          url: "https://shielded-lake-24260.herokuapp.com/token",
           data: formData,
           method: "POST",
           headers: { "content-type": "application/x-www-form-urlencoded" },
@@ -61,7 +61,7 @@ export default new Vuex.Store({
     register({ commit }, user) {
       return new Promise((resolve, reject) => {
         axios({
-          url: "http://localhost:8000/user",
+          url: "https://shielded-lake-24260.herokuapp.com/user",
           data: user,
           method: "POST",
           headers: { "content-type": "application/json" },

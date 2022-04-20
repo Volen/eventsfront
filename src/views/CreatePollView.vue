@@ -3,13 +3,11 @@
     <p>Пожалуйста, инициируйте новое голосование.</p>
     <form class="poll-initiation-form" @submit.prevent="createPoll">
       <label>Продолжительность первой фазы голосования в минутах</label>
-      <input v-model="firstPhaseMinutes" type="number" min="1" max="600" />
+      <input v-model="firstPhaseMinutes" type="number" min="1" max="60" />
       <label>Продолжительность первой фазы голосования в минутах</label>
-      <input v-model="secondPhaseMinutes" type="number" min="1" max="600" />
+      <input v-model="secondPhaseMinutes" type="number" min="1" max="60" />
       <button type="submit">Инициировать голосование</button>
     </form>
-
-    Time: {{ this.time }}
   </div>
 </template>
 
@@ -28,7 +26,7 @@ export default {
   methods: {
     createPoll() {
       axios({
-        url: "http://localhost:8000/poll",
+        url: "https://shielded-lake-24260.herokuapp.com/poll",
         data: {
           first_phase_minutes: this.firstPhaseMinutes,
           second_phase_minutes: this.secondPhaseMinutes,
@@ -56,7 +54,7 @@ export default {
   },
   mounted() {
     axios({
-      url: "http://localhost:8000/poll/active",
+      url: "https://shielded-lake-24260.herokuapp.com/poll/active",
       data: {},
       method: "GET",
     })
